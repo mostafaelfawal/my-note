@@ -3,6 +3,17 @@ import User from "../models/user.model";
 import generateToken from "../utils/generateToken";
 import bcrypt from "bcrypt";
 
+const sendCookie = (res: Response, user: any) => {
+  const token = generateToken(user._id);
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // only week 🙂
+  });
+};
+
 export const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -16,9 +27,9 @@ export const register = async (req: Request, res: Response) => {
 
   const user = await User.create({ email, password: hash });
 
-  res.status(201).json({
-    token: generateToken(user._id),
-  });
+  sendCookie(res, user);
+
+  return res.status(201).json({message: "📒 Registered successfully"})
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -34,8 +45,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Wrong password" });
   }
 
-  res.status(200).json({
-    token: generateToken(user._id),
-    message: "👋 welcome back check your notes",
-  });
+  sendCookie(res, user);
+
+  res.status(200).json({ message: "👋 welcome back check your notes" });
 };
