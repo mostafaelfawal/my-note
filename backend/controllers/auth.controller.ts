@@ -49,5 +49,5 @@ export const login = async (req: Request, res: Response) => {
 
   res
     .status(200)
-    .json({ message: `👋 welcome back ${user.name} check your notes` });
+    .json({ message: `👋 welcome back ${user.name}` });
 };
