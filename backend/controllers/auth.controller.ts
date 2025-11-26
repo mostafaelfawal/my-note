@@ -15,7 +15,7 @@ const sendCookie = (res: Response, user: any) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const exists = await User.findOne({ email });
 
@@ -25,11 +25,11 @@ export const register = async (req: Request, res: Response) => {
 
   const hash = await bcrypt.hash(password, 10);
 
-  const user = await User.create({ email, password: hash });
+  const user = await User.create({ email, name, password: hash });
 
   sendCookie(res, user);
 
-  return res.status(201).json({message: "📒 Registered successfully"})
+  return res.status(201).json({ message: "📒 Registered successfully" });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -47,5 +47,7 @@ export const login = async (req: Request, res: Response) => {
 
   sendCookie(res, user);
 
-  res.status(200).json({ message: "👋 welcome back check your notes" });
+  res
+    .status(200)
+    .json({ message: `👋 welcome back ${user.name} check your notes` });
 };
