@@ -47,7 +47,15 @@ export const login = async (req: Request, res: Response) => {
 
   sendCookie(res, user);
 
-  res
-    .status(200)
-    .json({ message: `👋 welcome back ${user.name}` });
+  res.status(200).json({ message: `👋 welcome back ${user.name}` });
+};
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+  });
+  
+  res.status(200).json({ message: "👋 logged out successfully" });
 };
