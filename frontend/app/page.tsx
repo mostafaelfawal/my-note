@@ -24,7 +24,11 @@ export default function Home() {
 
   const logout = async () => {
     const logout = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/logout`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
     );
     toast.success(logout.data.message);
     router.replace("/auth/login");

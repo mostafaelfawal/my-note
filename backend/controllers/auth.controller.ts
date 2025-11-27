@@ -1,18 +1,21 @@
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 import User from "../models/user.model";
 import generateToken from "../utils/generateToken";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: false,
+  sameSite: "strict",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  path: "/",
+};
+
 const sendCookie = (res: Response, user: any) => {
   const token = generateToken(user._id);
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // only week 🙂
-  });
+  res.cookie("token", token, cookieOptions);
 };
 
 export const register = async (req: Request, res: Response) => {
@@ -52,18 +55,17 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "strict",
-  });
-  
+  res.clearCookie("token", cookieOptions);
+
   res.status(200).json({ message: "👋 logged out successfully" });
 };
 
 export const me = (req: Request, res: Response) => {
   const token = req.cookies.token;
-  if (!token) return res.status(401).json({ loggedIn: false });
+
+  if (!token) return res.status(401);
+
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-  return res.status(200).json({ loggedIn: true, userId: decoded.id });
+
+  return res.status(200).json({ userId: decoded.id });
 };
