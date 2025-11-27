@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import generateToken from "../utils/generateToken";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const sendCookie = (res: Response, user: any) => {
   const token = generateToken(user._id);
@@ -58,4 +59,11 @@ export const logout = (req: Request, res: Response) => {
   });
   
   res.status(200).json({ message: "👋 logged out successfully" });
+};
+
+export const me = (req: Request, res: Response) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ loggedIn: false });
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+  return res.status(200).json({ loggedIn: true, userId: decoded.id });
 };
