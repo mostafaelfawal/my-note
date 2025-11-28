@@ -63,9 +63,16 @@ export const logout = (req: Request, res: Response) => {
 export const me = (req: Request, res: Response) => {
   const token = req.cookies.token;
 
-  if (!token) return res.status(401);
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-
-  return res.status(200).json({ userId: decoded.id });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string;
+    };
+    return res.status(200).json({ userId: decoded.id });
+  } catch {
+    return res.status(401).json({ message: "Invalid token" });
+  }
 };
