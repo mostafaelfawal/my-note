@@ -8,12 +8,15 @@ export const getNotes = async (req: Request, res: Response) => {
 
 export const createNote = async (req: Request, res: Response) => {
   const note = await Note.create({
-    ...req.body,
+    title: req.body.title,
+    content: req.body.content,
     user: req.user?.id,
   });
-  res
-    .status(201)
-    .json({ message: "Note created was successfully.", note: note });
+
+  res.status(201).json({
+    message: "Note created successfully",
+    note,
+  });
 };
 
 export const getNote = async (req: Request, res: Response) => {
