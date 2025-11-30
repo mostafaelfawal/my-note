@@ -15,6 +15,8 @@ app.use(
 );
 app.use(cookieParser());
 
+app.get("/", (req, res) => res.send("Hello world"))
+
 app.use("/api", authRouter);
 app.use("/api/notes", notesRouter);
 
