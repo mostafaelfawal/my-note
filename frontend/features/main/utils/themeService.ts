@@ -4,7 +4,3 @@ export function toggleTheme() {
   HTMLElement.classList.toggle("dark");
   localStorage.setItem("theme", isDark ? "light" : "dark");
 }
-
-export function getTheme() {
-  return localStorage.getItem("theme") || "light";
-}

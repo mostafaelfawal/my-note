@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import LogoutModal from "./Modals/LogoutModal";
-import { getTheme, toggleTheme } from "../utils/themeService";
+import { toggleTheme } from "../utils/themeService";
 
 export default function Header() {
   const [modal, setModal] = useState(false);
-  const [theme, setTheme] = useState(getTheme());
+  const [theme, setTheme] = useState("light");
 
   const router = useRouter();
 
