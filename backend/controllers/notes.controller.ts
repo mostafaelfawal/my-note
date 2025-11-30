@@ -10,6 +10,7 @@ export const createNote = async (req: Request, res: Response) => {
   const note = await Note.create({
     title: req.body.title,
     content: req.body.content,
+    tags: req.body.tags,
     user: req.user?.id,
   });
 
@@ -25,10 +26,16 @@ export const getNote = async (req: Request, res: Response) => {
 };
 
 export const updateNote = async (req: Request, res: Response) => {
-  const note = await Note.findByIdAndUpdate({
-    _id: req.params.id,
-    user: req.user?.id,
-  });
+  const note = await Note.findByIdAndUpdate(
+    req.params.id,
+    {
+      title: req.body.title,
+      content: req.body.content,
+      tags: req.body.tags,
+      user: req.user?.id,
+    },
+    { new: true }
+  );
   res
     .status(200)
     .json({ message: "Note updated was successfully.", note: note });
