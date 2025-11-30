@@ -1,9 +1,55 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 
 button {
     cursor: pointer;
 }
 button:disabled {
     cursor: not-allowed;
+}
+
+text, textarea {
+    caret-color: teal;
+}
+
+/* Scrollbar Base (Light Mode) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #14b8a6; /* teal-500 */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d9488; /* teal-600 */
+}
+
+/* DARK MODE */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937; /* gray-800 */
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #0d9488; /* teal-600 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #0f766e; /* teal-700 */
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #14b8a6 #f1f1f1;
+}
+
+.dark  {
+  scrollbar-color: #0d9488 #1f2937;
 }
