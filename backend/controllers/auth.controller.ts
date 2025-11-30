@@ -4,8 +4,8 @@ import generateToken from "../utils/generateToken";
 import bcrypt from "bcrypt";
 
 const cookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: false,
+  httpOnly: false,
+  secure: true,
   sameSite: "strict",
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/",

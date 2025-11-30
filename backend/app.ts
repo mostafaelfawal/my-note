@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: `http://localhost:3001`,
+    origin: `https://dot-note-frontend.vercel.app`,
     credentials: true,
   })
 );
