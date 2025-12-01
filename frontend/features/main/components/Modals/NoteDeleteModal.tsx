@@ -8,17 +8,24 @@ import toast from "react-hot-toast";
 export default function LogoutModal({
   closeModal,
   noteId,
+  onSuccess,
 }: {
   closeModal: () => void;
   noteId: string;
+  onSuccess?: (id: string) => void;
 }) {
-  const deleteSubmit = () => {
+  const deleteSubmit = async () => {
     closeModal();
-    toast.promise(handleDeleteNote(noteId), {
+
+    const op = handleDeleteNote(noteId);
+    toast.promise(op, {
       loading: "Deleting your note...",
       success: (result) => result.message,
       error: (result) => result.error,
     });
+
+    const result = await op;
+    if (result?.success) onSuccess?.(noteId);
   };
 
   return (
@@ -32,7 +39,9 @@ export default function LogoutModal({
           <CgDanger className="text-red-500 text-2xl" />
         </div>
 
-        <p className="font-bold text-2xl text-gray-800 dark:text-white mb-2">Delete</p>
+        <p className="font-bold text-2xl text-gray-800 dark:text-white mb-2">
+          Delete
+        </p>
         <p className="text-gray-500 dark:text-gray-400 mb-6">
           Are you sure you want to delete this note?
         </p>

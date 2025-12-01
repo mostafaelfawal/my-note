@@ -4,13 +4,13 @@ import { useState } from "react";
 import NoteAddEditModal from "./Modals/NoteAddEditModal";
 import NoteDeleteModal from "./Modals/NoteDeleteModal";
 
-export default function NoteCard({
-  _id,
-  title,
-  content,
-  tags,
-  createdAt,
-}: NoteType) {
+export default function NoteCard(
+  props: NoteType & {
+    onUpdate?: (note: NoteType) => void;
+    onDelete?: (id: string) => void;
+  }
+) {
+  const { _id, title, content, tags, createdAt, onUpdate, onDelete } = props;
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
@@ -69,12 +69,14 @@ export default function NoteCard({
           defaultTitle={title}
           defaultContent={content}
           closeModal={() => setEditModal(false)}
+          onSuccess={(updated) => onUpdate?.(updated)}
         />
       )}
       {deleteModal && (
         <NoteDeleteModal
           noteId={_id!}
           closeModal={() => setDeleteModal(false)}
+          onSuccess={(id) => onDelete?.(id)}
         />
       )}
     </div>

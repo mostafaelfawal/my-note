@@ -6,9 +6,11 @@ import toast from "react-hot-toast";
 export default function AddSection({
   notesCount,
   loggedIn,
+  onAdd,
 }: {
   notesCount: number;
   loggedIn: boolean;
+  onAdd?: (note: import("../types/NoteType").NoteType) => void;
 }) {
   const [modal, setModal] = useState(false);
 
@@ -28,7 +30,11 @@ export default function AddSection({
         <FiPlus /> Add New Note
       </button>
       {modal && (
-        <NoteAddEditModal closeModal={() => setModal(false)} modalIsAdd />
+        <NoteAddEditModal
+          closeModal={() => setModal(false)}
+          modalIsAdd
+          onSuccess={(note) => onAdd?.(note)}
+        />
       )}
     </section>
   );

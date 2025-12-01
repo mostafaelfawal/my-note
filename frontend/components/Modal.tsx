@@ -21,7 +21,7 @@ export default function Modal({
         onClick={(e) => e.stopPropagation()}
         className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-2xl transform transition-transform duration-300 min-w-100 border border-gray-100 dark:border-gray-500 max-h-screen overflow-y-auto"
       >
-        <div className="flex justify-between items-center mb-4">
+        <div className="z-3 flex justify-between items-center mb-4">
           <div className="flex gap-2 items-center">
             {icon}
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">{title}</h3>

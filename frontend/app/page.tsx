@@ -46,29 +46,47 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const allNotes = async () => {
-      if (loggedIn) return;
+    const fetchNotes = async () => {
       try {
         setLoading(true);
         const currentNotes = await handleReadNotes();
         const data = currentNotes.data || [];
         setNotes(data);
-
-        const getTags = data
-          .flatMap((n) => n.tags)
-          .sort()
-          .reduce((acc, tag) => {
-            acc[tag!] = (acc[tag!] || 0) + 1;
-            return acc;
-          }, {} as TagType);
-
-        setTags(getTags);
       } finally {
         setLoading(false);
       }
     };
-    allNotes();
+
+    fetchNotes();
   }, []);
+
+  // keep tags in sync with notes whenever notes change
+  useEffect(() => {
+    const getTags = notes
+      .flatMap((n) => n.tags)
+      .sort()
+      .reduce((acc, tag) => {
+        acc[tag!] = (acc[tag!] || 0) + 1;
+        return acc;
+      }, {} as TagType);
+
+    setTags(getTags);
+  }, [notes]);
+
+  // handlers used by child components so UI updates without refresh
+  const handleAddNote = (note: NoteType) => {
+    // add new note at the top
+    setNotes((prev) => [note, ...prev]);
+  };
+
+  const handleUpdateNoteInState = (updated: NoteType) => {
+    if (!updated._id) return;
+    setNotes((prev) => prev.map((n) => (n._id === updated._id ? updated : n)));
+  };
+
+  const handleDeleteNoteFromState = (id: string) => {
+    setNotes((prev) => prev.filter((n) => n._id !== id));
+  };
 
   const filteredNotes = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -89,7 +107,11 @@ export default function Home() {
   return (
     <div className="dark:bg-gray-700">
       <Header userData={userData} loggedIn={loggedIn} />
-      <AddSection loggedIn={loggedIn} notesCount={notes.length} />
+      <AddSection
+        loggedIn={loggedIn}
+        notesCount={notes.length}
+        onAdd={handleAddNote}
+      />
       <SearchSection
         tags={tags}
         notesLength={notes.length}
@@ -112,6 +134,8 @@ export default function Home() {
                 content={n.content}
                 tags={n.tags}
                 createdAt={formatDate(n.createdAt!)}
+                onUpdate={handleUpdateNoteInState}
+                onDelete={handleDeleteNoteFromState}
               />
             ))}
           </div>

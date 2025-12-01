@@ -11,6 +11,8 @@ import { FiEdit } from "react-icons/fi";
 import TagsInput from "../TagsInput";
 import handleUpdateNote from "../../utils/CRUD/handleUpdateNote";
 
+import { NoteType } from "../../types/NoteType";
+
 export default function NoteAddEditModal({
   modalIsAdd = false,
   closeModal,
@@ -18,6 +20,7 @@ export default function NoteAddEditModal({
   defaultTitle,
   defaultContent,
   defaultTags,
+  onSuccess,
 }: {
   modalIsAdd?: boolean;
   closeModal: () => void;
@@ -25,6 +28,7 @@ export default function NoteAddEditModal({
   defaultContent?: string;
   defaultTags?: string[];
   noteId?: string;
+  onSuccess?: (note: NoteType) => void;
 }) {
   const {
     register,
@@ -45,32 +49,44 @@ export default function NoteAddEditModal({
 
   const formSubmit = async (data: NoteSchemaType) => {
     if (modalIsAdd) {
-      toast.promise(
-        handleCreateNote({
-          title: data.title.trim(),
-          content: content.trim(),
-          tags: data.tags,
-        }),
-        {
-          loading: "Adding new note...",
-          success: (result) => result.message!,
-          error: (result) => result.error,
-        }
-      );
+      const op = handleCreateNote({
+        title: data.title.trim(),
+        content: content.trim(),
+        tags: data.tags,
+      });
+
+      toast.promise(op, {
+        loading: "Adding new note...",
+        success: (result) => result.message!,
+        error: (result) => result.error,
+      });
+
+      const result = await op;
+      if (result?.success && result?.data) {
+        // backend returns { message, note } for create/update
+        const returned = result.data.note ?? result.data;
+        onSuccess?.(returned);
+      }
     } else {
-      toast.promise(
-        handleUpdateNote({
-          _id: noteId,
-          title: data.title.trim(),
-          content: content.trim(),
-          tags: tags,
-        }),
-        {
-          loading: "Updating your note...",
-          success: (result) => result.message!,
-          error: (result) => result.error,
-        }
-      );
+      const op = handleUpdateNote({
+        _id: noteId,
+        title: data.title.trim(),
+        content: content.trim(),
+        tags: tags,
+      });
+
+      toast.promise(op, {
+        loading: "Updating your note...",
+        success: (result) => result.message!,
+        error: (result) => result.error,
+      });
+
+      const result = await op;
+      if (result?.success && result?.data) {
+        // backend returns { message, note } for create/update
+        const returned = result.data.note ?? result.data;
+        onSuccess?.(returned);
+      }
     }
     closeModal();
   };
