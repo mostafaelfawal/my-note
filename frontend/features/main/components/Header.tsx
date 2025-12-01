@@ -7,7 +7,13 @@ import { useState } from "react";
 import LogoutModal from "./Modals/LogoutModal";
 import { toggleTheme } from "../utils/themeService";
 
-export default function Header({ loggedIn }: { loggedIn: boolean }) {
+export default function Header({
+  loggedIn,
+  userData,
+}: {
+  loggedIn: boolean;
+  userData: { name: string; email: string };
+}) {
   const [modal, setModal] = useState(false);
   const [theme, setTheme] = useState("light");
   const router = useRouter();
@@ -38,7 +44,7 @@ export default function Header({ loggedIn }: { loggedIn: boolean }) {
           <h1 className="text-teal-600 text-2xl font-semibold">Dot Note</h1>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex items-center gap-4">
           {/* Theme Button */}
           <button
             onClick={handleToggleTheme}
@@ -47,6 +53,24 @@ export default function Header({ loggedIn }: { loggedIn: boolean }) {
             {theme === "dark" ? <FaRegSun /> : <FaRegMoon />}
           </button>
 
+          {/* User Data Display */}
+          {loggedIn && userData && (
+            <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-600 rounded-lg px-3 py-2 shadow-md">
+              <div className="bg-teal-500 text-white rounded-full w-7 h-7 flex items-center justify-center font-semibold">
+                {userData.name[0].toUpperCase()}
+              </div>
+              <div className="flex flex-col text-sm">
+                <span className="font-semibold text-gray-800 dark:text-white">
+                  {userData.name}
+                </span>
+                <span className="text-gray-500 dark:text-gray-300 truncate max-w-[150px]">
+                  {userData.email}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Login / Logout Button */}
           {loggedIn ? (
             <button
               onClick={() => setModal(true)}

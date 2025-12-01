@@ -60,9 +60,25 @@ export const logout = (req: Request, res: Response) => {
   res.status(200).json({ message: "👋 logged out successfully" });
 };
 
-export const me = (req: Request, res: Response) => {
-  const token = req.cookies.token;
-  if (!token) return res.status(401).json({ loggedIn: false });
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-  return res.status(200).json({ loggedIn: true, userId: decoded.id });
+export const me = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ loggedIn: false });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string;
+    };
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) return res.status(401).json({ loggedIn: false });
+
+    return res.status(200).json({
+      loggedIn: true,
+      username: user.name,
+      email: user.email,
+    });
+  } catch (err) {
+    return res.status(401).json({ loggedIn: false });
+  }
 };

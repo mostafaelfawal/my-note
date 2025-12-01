@@ -21,6 +21,10 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({
+    name: "Dot-User",
+    email: "email@example.com",
+  });
 
   useEffect(() => {
     const checkUser = async () => {
@@ -32,6 +36,7 @@ export default function Home() {
           }
         );
         if (res.data.loggedIn) setLoggedIn(true);
+        setUserData({ name: res.data.username, email: res.data.email });
       } catch (err) {
         setLoggedIn(false); // 401 → مش مسجل دخول
       }
@@ -83,7 +88,7 @@ export default function Home() {
 
   return (
     <div className="dark:bg-gray-700">
-      <Header loggedIn={loggedIn} />
+      <Header userData={userData} loggedIn={loggedIn} />
       <AddSection loggedIn={loggedIn} notesCount={notes.length} />
       <SearchSection
         tags={tags}
