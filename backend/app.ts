@@ -17,7 +17,21 @@ app.use(
   })
 );
 app.use(cookieParser());
-connectDB();
+declare global {
+  var mongoConnected: boolean | undefined;
+}
+app.use(async (req, res, next) => {
+  if (!global.mongoConnected) {
+    try {
+      await connectDB();
+      global.mongoConnected = true;
+    } catch (err) {
+      console.error("MongoDB connection error:", err);
+      return res.status(500).json({ message: "Database connection failed" });
+    }
+  }
+  next();
+});
 
 app.get("/", (req, res) => res.send("Hello world"));
 
