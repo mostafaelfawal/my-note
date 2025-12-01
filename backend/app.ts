@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.routes";
 import notesRouter from "./routes/notes.routes";
 import cookieParser from "cookie-parser";
 import serverless from "@vendia/serverless-express";
+import connectDB from "./config/db";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(
   })
 );
 app.use(cookieParser());
+connectDB();
 
 app.get("/", (req, res) => res.send("Hello world"));
 
