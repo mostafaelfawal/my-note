@@ -12,6 +12,7 @@ import formatDate from "@/features/main/utils/formatDate";
 import handleReadNotes from "@/features/main/utils/CRUD/handleReadNotes";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 export default function Home() {
   const [notes, setNotes] = useState<NoteType[]>([]);
@@ -19,7 +20,26 @@ export default function Home() {
   const [selectedTag, setSelectedTag] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/me`,
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.data.loggedIn) setLoggedIn(true);
+      } catch (err) {
+        setLoggedIn(false); // 401 → مش مسجل دخول
+      }
+    };
+
+    checkUser();
+  }, []);
+  
   useEffect(() => {
     const allNotes = async () => {
       try {
@@ -62,8 +82,8 @@ export default function Home() {
 
   return (
     <div className="dark:bg-gray-700">
-      <Header />
-      <AddSection notesCount={notes.length} />
+      <Header loggedIn={loggedIn} />
+      <AddSection loggedIn={loggedIn} notesCount={notes.length} />
       <SearchSection
         tags={tags}
         search={search}

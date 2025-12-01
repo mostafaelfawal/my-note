@@ -1,8 +1,15 @@
 import { useState } from "react";
 import NoteAddEditModal from "./Modals/NoteAddEditModal";
 import { FiPlus } from "react-icons/fi";
+import toast from "react-hot-toast";
 
-export default function AddSection({ notesCount }: { notesCount: number }) {
+export default function AddSection({
+  notesCount,
+  loggedIn,
+}: {
+  notesCount: number;
+  loggedIn: boolean;
+}) {
   const [modal, setModal] = useState(false);
 
   return (
@@ -12,7 +19,10 @@ export default function AddSection({ notesCount }: { notesCount: number }) {
         <p className="text-gray-400">{notesCount} notes</p>
       </div>
       <button
-        onClick={() => setModal(true)}
+        onClick={() => {
+          if (!loggedIn) return toast.error("Login or signup first");
+          setModal(true);
+        }}
         className="rounded-md text-white bg-teal-500 hover:opacity-90 transition-opacity flex gap-2 items-center px-4 py-2 shadow"
       >
         <FiPlus /> Add New Note
