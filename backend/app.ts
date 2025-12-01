@@ -15,7 +15,6 @@ app.use(
 );
 app.use(cookieParser());
 
-
 app.use("/api", authRouter);
 app.use("/api/notes", notesRouter);
 

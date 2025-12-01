@@ -7,7 +7,8 @@
   "type": "commonjs",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon server.ts"
+    "start": "  server.ts",
+    "dev": "nodemon server.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
