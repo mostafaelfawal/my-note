@@ -92,6 +92,7 @@ export default function Home() {
       <AddSection loggedIn={loggedIn} notesCount={notes.length} />
       <SearchSection
         tags={tags}
+        notesLength={notes.length}
         search={search}
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}

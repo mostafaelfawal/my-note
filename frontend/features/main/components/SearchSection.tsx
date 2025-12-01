@@ -3,12 +3,14 @@ import { TagType } from "../types/TagType";
 
 export default function SearchSection({
   tags,
+  notesLength,
   search,
   selectedTag,
   setSearch,
   setSelectedTag,
 }: {
   tags: TagType;
+  notesLength: number;
   search: string;
   setSearch: (v: string) => void;
   selectedTag: string;
@@ -67,7 +69,10 @@ export default function SearchSection({
         border border-gray-200 dark:border-gray-500 
         px-3 py-1 mr-2`}
       >
-        All
+        All{" "}
+        <span className="text-gray-500 dark:text-gray-300">
+          ({notesLength})
+        </span>
       </button>
     </section>
   );
