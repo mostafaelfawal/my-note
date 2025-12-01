@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 const cookieOptions: CookieOptions = {
   httpOnly: false,
   secure: true,
-  sameSite: "strict",
+  sameSite: "none",
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/",
 };
