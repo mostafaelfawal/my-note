@@ -28,6 +28,7 @@ export default function AuthForm() {
 
   const handleLogin = async (data: AuthSchemaType) => {
     setLoading(true);
+    console.log(process.env.NEXT_PUBLIC_API_URL)
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
