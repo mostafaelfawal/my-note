@@ -26,7 +26,7 @@ app.use("/api/notes", notesRouter);
 export const handler = serverless({ app });
 
 // هذا للـ local development فقط
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   import("dotenv").then((dotenv) => dotenv.config());
   import("./config/db").then((module) => module.default());
 
