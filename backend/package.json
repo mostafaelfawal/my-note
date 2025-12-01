@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "server.ts",
   "scripts": {
-    "start": "node server.ts"
+    "start": "nodemon server.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -20,7 +20,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@vendia/serverless-express": "^4.12.6",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
