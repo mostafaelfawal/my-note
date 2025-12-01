@@ -39,9 +39,10 @@ export default function Home() {
 
     checkUser();
   }, []);
-  
+
   useEffect(() => {
     const allNotes = async () => {
+      if (loggedIn) return;
       try {
         setLoading(true);
         const currentNotes = await handleReadNotes();
