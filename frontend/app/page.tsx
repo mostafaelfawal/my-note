@@ -13,6 +13,7 @@ import handleReadNotes from "@/features/main/utils/CRUD/handleReadNotes";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [notes, setNotes] = useState<NoteType[]>([]);
@@ -26,6 +27,7 @@ export default function Home() {
     email: "email@example.com",
   });
 
+  // Get User Data
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -45,6 +47,7 @@ export default function Home() {
     checkUser();
   }, []);
 
+  // Get Notes
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -125,7 +128,11 @@ export default function Home() {
         {loading ? (
           <LoadingNoteCard />
         ) : filteredNotes.length ? (
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 ">
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 "
+          >
             {filteredNotes.map((n) => (
               <NoteCard
                 key={n._id}
@@ -138,9 +145,13 @@ export default function Home() {
                 onDelete={handleDeleteNoteFromState}
               />
             ))}
-          </div>
+          </motion.div>
         ) : search ? (
-          <div className="flex flex-col items-center w-full">
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="flex flex-col items-center w-full"
+          >
             <Image
               src="/no search.svg"
               alt="no search"
@@ -153,9 +164,13 @@ export default function Home() {
             <p className="text-sm text-gray-500 max-w-1/2 text-center line-clamp-2 dark:text-gray-400">
               No Note matched with your search "{search}"
             </p>
-          </div>
+          </motion.div>
         ) : (
-          <div className="flex flex-col items-center w-full">
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="flex flex-col items-center w-full"
+          >
             <Image src="/no notes.svg" alt="no notes" width={200} height={0} />
             <p className="mt-3 mb-1 text-xl font-semibold dark:text-white">
               No Notes yet
@@ -163,7 +178,7 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Add your first note
             </p>
-          </div>
+          </motion.div>
         )}
       </div>
       <Footer />

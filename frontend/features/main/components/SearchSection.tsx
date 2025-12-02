@@ -1,5 +1,6 @@
 import { FaSearch } from "react-icons/fa";
 import { TagType } from "../types/TagType";
+import { motion } from "framer-motion";
 
 export default function SearchSection({
   tags,
@@ -19,7 +20,12 @@ export default function SearchSection({
   const tagsArray = tags ? Object.entries(tags) : [];
 
   return (
-    <section className="px-6 py-8 space-y-3 border-b border-b-gray-200 dark:border-b-gray-600">
+    <motion.section
+      initial={{ y: -10, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="px-6 py-8 space-y-3 border-b border-b-gray-200 dark:border-b-gray-600"
+    >
       <input
         type="text"
         value={search}
@@ -74,6 +80,6 @@ export default function SearchSection({
           ({notesLength})
         </span>
       </button>
-    </section>
+    </motion.section>
   );
 }

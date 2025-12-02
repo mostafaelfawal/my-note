@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import LogoutModal from "./Modals/LogoutModal";
 import { toggleTheme } from "../utils/themeService";
+import { motion } from "framer-motion";
 
 export default function Header({
   loggedIn,
@@ -36,7 +37,12 @@ export default function Header({
 
   return (
     <header className="sticky top-0 backdrop-blur-xl border-b border-b-gray-200 dark:border-b-gray-600">
-      <nav className="flex items-center justify-between px-10 py-3">
+      <motion.nav
+        initial={{ y: -10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-center justify-between px-10 py-3"
+      >
         <div className="flex items-center gap-2">
           <div className="text-2xl text-white dark:text-black bg-teal-600 rounded-lg p-2 w-fit">
             <FaRegFile />
@@ -55,7 +61,12 @@ export default function Header({
 
           {/* User Data Display */}
           {loggedIn && userData && (
-            <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-600 rounded-lg px-3 py-2 shadow-md">
+            <motion.div
+              initial={{ y: -10 , opacity: 0 }}
+              animate={{ y: 0 , opacity: 1}}
+              transition={{ delay: .5 }}
+              className="flex items-center gap-3 bg-gray-100 dark:bg-gray-600 rounded-lg px-3 py-2 shadow-md"
+            >
               <div className="bg-teal-500 text-white rounded-full w-7 h-7 flex items-center justify-center font-semibold">
                 {userData.name[0].toUpperCase()}
               </div>
@@ -67,7 +78,7 @@ export default function Header({
                   {userData.email}
                 </span>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Login / Logout Button */}
@@ -87,7 +98,7 @@ export default function Header({
             </button>
           )}
         </div>
-      </nav>
+      </motion.nav>
 
       {modal && (
         <LogoutModal

@@ -2,6 +2,7 @@ import { useState } from "react";
 import NoteAddEditModal from "./Modals/NoteAddEditModal";
 import { FiPlus } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function AddSection({
   notesCount,
@@ -15,12 +16,19 @@ export default function AddSection({
   const [modal, setModal] = useState(false);
 
   return (
-    <section className="px-6 py-8 border-b dark:bg-gray-700 border-b-gray-200 dark:border-b-gray-700 flex justify-between items-center">
+    <motion.section
+      initial={{ y: -10, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="px-6 py-8 border-b dark:bg-gray-700 border-b-gray-200 dark:border-b-gray-700 flex justify-between items-center"
+    >
       <div>
         <h2 className="text-3xl font-bold dark:text-white">My Notes</h2>
         <p className="text-gray-400">{notesCount} notes</p>
       </div>
-      <button
+      <motion.button
+        initial={{ x: 20 }}
+        animate={{ x: 0 }}
         onClick={() => {
           if (!loggedIn) return toast.error("Login or signup first");
           setModal(true);
@@ -28,7 +36,7 @@ export default function AddSection({
         className="rounded-md text-white bg-teal-500 hover:opacity-90 transition-opacity flex gap-2 items-center px-4 py-2 shadow"
       >
         <FiPlus /> Add New Note
-      </button>
+      </motion.button>
       {modal && (
         <NoteAddEditModal
           closeModal={() => setModal(false)}
@@ -36,6 +44,6 @@ export default function AddSection({
           onSuccess={(note) => onAdd?.(note)}
         />
       )}
-    </section>
+    </motion.section>
   );
 }
